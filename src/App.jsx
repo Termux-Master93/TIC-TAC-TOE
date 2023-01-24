@@ -31,13 +31,26 @@ const WINNER_COMBOS = [
   [2,4,6],
   
 ]
+
 function App() {
   const [board,setBoard]=useState(Array(9).fill(null))
   const [turn,setTurn]=useState(TURNS.X)
+  const [winner,setWinner]=useState(null);
 
+  const checkWinner=(boardToCheck)=>{
+    for(const combo of WINNER_COMBOS){
+      const [a,b,c]=combo
+      if(boardToCheck[a] &&
+        boardToCheck[a] === boardToCheck[b] &&
+        boardToCheck[a]=== boardToCheck[c]){
+          return boardToCheck[a]
+        }
+    }
+    return null
+  }
   const updateBoard=(index)=>{
     //QUE NO SE ACTRUALIZE EL TURNO EXISTENTE
-    if(board[index] ) return // if exiist any then return
+    if(board[index] || winner) return // if exiist any then return
     //aCTUAIZAR EL TABLERO
     const newBoard=[...board] //el estado nunca debe ser inmutable si no que debe agregarse otro array
     newBoard[index]=turn
@@ -45,6 +58,12 @@ function App() {
  //CAMBIAR EN TURNNO
     const newTurn= turn ===TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
+
+    const newWinner=checkWinner(newBoard)
+    if(newWinner){
+      setWinner(newWinner)
+      alert("el ganador es "+newWinner)
+    }
   }
   return (
     <main className="board">
