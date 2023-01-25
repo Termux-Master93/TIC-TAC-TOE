@@ -62,7 +62,6 @@ function App() {
     const newWinner=checkWinner(newBoard)
     if(newWinner){
       setWinner(newWinner)
-      alert("el ganador es "+newWinner)
     }
   }
   return (
@@ -91,6 +90,23 @@ function App() {
           {TURNS.O}
         </Square>
       </section>
+      {
+        winner !== null && (
+          <section className="winner">
+            <div className="text">
+              <h2>{winner ===false ? 'Empate' : 'Gano'}</h2>
+            
+
+          <header className="win">
+            {winner && <Square>{winner}</Square>}
+          </header>
+          <footer>
+            <button>Empezar de nueva Cuenta</button>
+          </footer>
+          </div>
+          </section>
+        )
+      }
     </main>
   )
 }
