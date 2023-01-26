@@ -48,6 +48,16 @@ function App() {
     }
     return null
   }
+
+  //Reiniciar Guego
+  const resetGame=()=>{
+    setBoard(Array(9).fill(null))
+    setTurn(TURNS.X)
+    setWinner(null)
+}
+  const checkEndGame=(newBoard)=>{
+    return newBoard.every((square)=>square !== null)
+  }
   const updateBoard=(index)=>{
     //QUE NO SE ACTRUALIZE EL TURNO EXISTENTE
     if(board[index] || winner) return // if exiist any then return
@@ -62,11 +72,14 @@ function App() {
     const newWinner=checkWinner(newBoard)
     if(newWinner){
       setWinner(newWinner)
+    }else if(checkEndGame(newBoard)){
+      setWinner(false)
     }
   }
   return (
     <main className="board">
      <h2>hola quer tal</h2>
+     <button onClick={resetGame}>Empezar de nueva Cuenta</button>
       <section className="game">
         {
           board.map((_,index)=>{
@@ -101,7 +114,7 @@ function App() {
             {winner && <Square>{winner}</Square>}
           </header>
           <footer>
-            <button>Empezar de nueva Cuenta</button>
+            <button onClick={resetGame}>Empezar de nueva Cuenta</button>
           </footer>
           </div>
           </section>
