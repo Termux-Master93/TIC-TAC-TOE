@@ -2,13 +2,21 @@ import { useState } from "react"
 import confetti from "canvas-confetti"
 
 import { Square } from "./componets/Square"
-import { TURNS,WINNER_COMBOS } from "./constants"
+import { TURNS } from "./constants"
 import { checkWinnerFrom,checkEndGame } from "./logical/board"
 import { WinnerModal } from "./componets/WinnerModal"
 
 function App() {
-  const [board,setBoard]=useState(Array(9).fill(null))
-  const [turn,setTurn]=useState(TURNS.X)
+  const [board,setBoard]=useState(()=>{
+    const boardFromStorage= window.localStorage.getItem('board')
+    if(boardFromStorage) return JSON.parse(boardFromStorage)
+    return Array(9).fill(null)
+  })
+  const [turn,setTurn]=useState(()=>{
+    const turnFromStorage=window.localStorage.getItem('turn')
+    return turnFromStorage ?? TURNS.X
+  })
+
   const [winner,setWinner]=useState(null);
 
   //Reiniciar Guego
@@ -16,6 +24,9 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+    //sesetear ellocalStorage
+    window.localStorage.removeItem('board')
+    window.localStorage.removeItem('turn')
 }
 
   const updateBoard=(index)=>{
@@ -28,7 +39,9 @@ function App() {
  //CAMBIAR EN TURNNO
     const newTurn= turn ===TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
-
+  //Guardar l aulrima gugada
+  window.localStorage.setItem('board',JSON.stringify(newBoard))
+  window.localStorage.setItem('turn',newTurn)
     const newWinner=checkWinnerFrom(newBoard)
     if(newWinner){
       confetti()
